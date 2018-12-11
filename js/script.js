@@ -15,31 +15,19 @@ class Service{
 	b.type = "button"
 	b.innerHTML = this.symbol
 	e.appendChild(b)
-	/*
-    let rep = "<div class=\"col-xs-1\" id=\"" + this.name + "\" >"+
-            "<button type=\"button\" class=\"btn btn-default\">" + this.symbol + "</button>"+
-          "</div>"
-    return rep
-	*/
 	this.element = e
 	this.button = b
 	return e
   }
   
-  addService(){
-    document.getElementById('microservices').appendChild(this.element)
+  addService(e){
+    e.appendChild(this.element)
   }
   
   useService(){
   }
 }
 
-function addServices(){
-  for(let s of services){
-    console.log(s)
-    s.addService()
-  }
-}
 var services = {
 	plusService : new Service("plus","+"),
 	minusService : new Service("minus","-"),
@@ -47,5 +35,6 @@ var services = {
 	divService : new Service("div","/")
 }
 document.addEventListener("DOMContentLoaded",()=>{
-	for(let s in services){services[s].addService()}
+	let e = document.getElementById('microservices')
+	for(let s in services){services[s].addService(e)}
 })
