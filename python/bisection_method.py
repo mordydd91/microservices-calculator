@@ -6,8 +6,7 @@ def optimal_iteration(a, b, epsilon):
 
 def bisection_method(aX, bX, f, epsilon=10**-4):
     if(f(aX)*f(bX)>0):
-        print("Error! f(a) and f(b) don't have opposite signs")
-        return
+        return "Error! f(a) and f(b) don't have opposite signs"
     num_iteration = optimal_iteration(aX, bX, epsilon)
     count = 0
     mX = (aX + bX) / 2.0
