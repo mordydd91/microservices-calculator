@@ -30,8 +30,9 @@ public class CalcGUI {
 	private JTextField textField1;
 	
 	private String pythonPath = "python";
-	private static String basePath = new File(CalcGUI.class.getResource("").getFile()).getAbsolutePath();
-	
+//	private static String basePath = new File(CalcGUI.class.getResource("").getFile()).getAbsolutePath();
+	public static String pythonServicesPath = System.getProperty("user.dir") + "\\python";
+
 	private String activateMicro(String name){
 		ArrayList<String> arr = new ArrayList<>();
 		try {
@@ -43,7 +44,7 @@ public class CalcGUI {
 		catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Fields cannot be empty");
 		}
-		String path= "\"" +basePath+"\\"+name+".py\"";
+		String path= "\"" +pythonServicesPath+"\\"+name+".py\"";
 		String res = RunCmdService.runCmd(pythonPath, path, arr);
 		return res;
 	}
@@ -52,16 +53,15 @@ public class CalcGUI {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
+		System.out.println();
+		EventQueue.invokeLater(()->{
 				try {
 					CalcGUI window = new CalcGUI();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-			}
-		});
+			});
 	}
 
 	/**
@@ -76,6 +76,7 @@ public class CalcGUI {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle("Calculator microservices");
 		frame.setSize(new Dimension(701, 428));
 		frame.getContentPane().setLayout(null);
@@ -116,48 +117,34 @@ public class CalcGUI {
 		
 		plusButton = new JButton("+");
 		plusButton.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		plusButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				UpdateResult.updateResult(activateMicro("plus"), resultLablel);
-			}
-		});
+		plusButton.addActionListener((e)->{UpdateResult.updateResult(activateMicro("plus"), resultLablel);});
 		plusButton.setHorizontalAlignment(SwingConstants.LEFT);
 		plusButton.setBounds(36, 259, 55, 52);
 		frame.getContentPane().add(plusButton);
 		
 		minusButton = new JButton("-");
-		minusButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				UpdateResult.updateResult(activateMicro("minus"), resultLablel);
-			}
-		});
+		minusButton.addActionListener((e)->{UpdateResult.updateResult(activateMicro("minus"), resultLablel);});
 		minusButton.setHorizontalAlignment(SwingConstants.LEFT);
 		minusButton.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		minusButton.setBounds(135, 259, 55, 52);
 		frame.getContentPane().add(minusButton);
 		
 		multButton = new JButton("*");
-		multButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				UpdateResult.updateResult(activateMicro("mult"), resultLablel);
-			}
-		});
+		multButton.addActionListener((e)->{UpdateResult.updateResult(activateMicro("mult"), resultLablel);});
 		multButton.setHorizontalAlignment(SwingConstants.LEFT);
 		multButton.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		multButton.setBounds(232, 259, 55, 52);
 		frame.getContentPane().add(multButton);
 		
 		divButton = new JButton("/");
-		divButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					if(Float.parseFloat(textField2.getText())==0)
-						PopoUpDivByZero.getPopUpMsgDivByZero();
-					UpdateResult.updateResult(activateMicro("div"), resultLablel);
-				}
-				catch (Exception e1) {
-					JOptionPane.showMessageDialog(null, "Fields cannot be empty");
-				}
+		divButton.addActionListener((e)->{
+			try {
+				if(Float.parseFloat(textField2.getText())==0)
+					PopoUpDivByZero.getPopUpMsgDivByZero();
+				UpdateResult.updateResult(activateMicro("div"), resultLablel);
+			}
+			catch (Exception e1) {
+				JOptionPane.showMessageDialog(null, "Fields cannot be empty");
 			}
 		});
 		divButton.setHorizontalAlignment(SwingConstants.LEFT);
@@ -169,17 +156,14 @@ public class CalcGUI {
 		modButton.setHorizontalAlignment(SwingConstants.LEFT);
 		modButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		modButton.setBounds(435, 259, 55, 52);
-		modButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					if(Float.parseFloat(textField2.getText())==0)
-						PopoUpDivByZero.getPopUpMsgDivByZero();
-					UpdateResult.updateResult(activateMicro("modulo"), resultLablel);
-				}
-				catch (Exception e2) {
-					JOptionPane.showMessageDialog(null, "Fields cannot be empty");
-				}
+		modButton.addActionListener((e)->{
+			try {
+				if(Float.parseFloat(textField2.getText())==0)
+					PopoUpDivByZero.getPopUpMsgDivByZero();
+				UpdateResult.updateResult(activateMicro("modulo"), resultLablel);
+			}
+			catch (Exception e2) {
+				JOptionPane.showMessageDialog(null, "Fields cannot be empty");
 			}
 		});
 		frame.getContentPane().add(modButton);
@@ -189,51 +173,22 @@ public class CalcGUI {
 		rootButton.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		rootButton.setToolTipText("The root of the function: x^2-2");
 		rootButton.setBounds(533, 259, 108, 52);
-		rootButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String path= "\"" +basePath+"\\"+"secant_method"+".py\"";
+		rootButton.addActionListener((e)->{
+			String path= "\"" +pythonServicesPath+"\\"+"secant_method"+".py\"";
+			if(ExistFile.isFileExist(path.substring(1, path.length()-1))) {
+				String res = RunCmdService.runCmd(pythonPath, path, new ArrayList<String>());
+				resultLablel.setText(res + " By secant");
+			}
+			else {
+				path= "\"" +pythonServicesPath+"\\"+"bisection_method"+".py\"";
 				if(ExistFile.isFileExist(path.substring(1, path.length()-1))) {
 					String res = RunCmdService.runCmd(pythonPath, path, new ArrayList<String>());
-					resultLablel.setText(res.substring(0, 6) + " By secant");
+					resultLablel.setText(res + " By bisection");
 				}
-				else {
-					path= "\"" +basePath+"\\"+"bisection_method"+".py\"";
-					if(ExistFile.isFileExist(path.substring(1, path.length()-1))) {
-						String res = RunCmdService.runCmd(pythonPath, path, new ArrayList<String>());
-						resultLablel.setText(res.substring(0, 6) + " By bisection");
-					}
-					else
-						JOptionPane.showMessageDialog(null, "Cannot find microservice");
-				}
+				else
+					JOptionPane.showMessageDialog(null, "Cannot find microservice");
 			}
 		});
 		frame.getContentPane().add(rootButton);
-		
-		frame.addWindowListener(new WindowListener() {
-			
-			@Override
-			public void windowOpened(WindowEvent e) {}
-			
-			@Override
-			public void windowIconified(WindowEvent e) {}
-			
-			@Override
-			public void windowDeiconified(WindowEvent e) {}
-			
-			@Override
-			public void windowDeactivated(WindowEvent e) {}
-			
-			@Override
-			public void windowClosing(WindowEvent e) {
-				System.exit(0);
-			}
-			
-			@Override
-			public void windowClosed(WindowEvent e) {}
-			
-			@Override
-			public void windowActivated(WindowEvent e) {}
-		});
 	}
 }

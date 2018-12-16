@@ -11,7 +11,6 @@ def bisection_method(aX, bX, f, epsilon=10**-4):
     count = 0
     mX = (aX + bX) / 2.0
     while(count<num_iteration and abs(f(mX))>epsilon):
-        print("aX: {}, bX: {}".format(aX, bX))
         if(f(aX)*f(mX)<0):
             bX=mX
         else:

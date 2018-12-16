@@ -1,11 +1,8 @@
-#from subprocess import Popen, PIPE
 import subprocess
 from pathlib import Path
-import time
 
 pythonPath = "python"
-folders = ["" , r"\bin" , r"\python"]
-
+folders = ["bin" , "python"]
 def execute_microservice(a,b, microName):
     microPath = find(microName);
     if(not microPath): return "could'nt find " + microName
@@ -14,7 +11,7 @@ def execute_microservice(a,b, microName):
 
 def find(microName):
     for folder in folders:
-        microPath = folder+microName
+        microPath = folder+"\\"+microName
         if(Path(microPath).is_file()):
             return microPath
     return None    
