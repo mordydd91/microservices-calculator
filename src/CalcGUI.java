@@ -2,6 +2,8 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
+
 import java.awt.Dimension;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -20,7 +22,7 @@ public class CalcGUI {
 	private JTextField textField2;
 	private JLabel lblOp;
 	private JLabel lbl;
-	private JLabel resultLablel;
+	private JTextArea resultTextArea;
 	private JButton plusButton;
 	private JButton minusButton;
 	private JButton multButton;
@@ -110,27 +112,27 @@ public class CalcGUI {
 		lbl.setBounds(419, 112, 36, 14);
 		frame.getContentPane().add(lbl);
 		
-		resultLablel = new JLabel("RESULT");
-		resultLablel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		resultLablel.setBounds(481, 100, 208, 39);
-		frame.getContentPane().add(resultLablel);
+		resultTextArea = new JTextArea("RESULT");
+		resultTextArea.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		resultTextArea.setBounds(481, 100, 208, 39);
+		frame.getContentPane().add(resultTextArea);
 		
 		plusButton = new JButton("+");
 		plusButton.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		plusButton.addActionListener((e)->{UpdateResult.updateResult(activateMicro("plus"), resultLablel);});
+		plusButton.addActionListener((e)->{UpdateResult.updateResult(activateMicro("plus"), resultTextArea);});
 		plusButton.setHorizontalAlignment(SwingConstants.LEFT);
 		plusButton.setBounds(36, 259, 55, 52);
 		frame.getContentPane().add(plusButton);
 		
 		minusButton = new JButton("-");
-		minusButton.addActionListener((e)->{UpdateResult.updateResult(activateMicro("minus"), resultLablel);});
+		minusButton.addActionListener((e)->{UpdateResult.updateResult(activateMicro("minus"), resultTextArea);});
 		minusButton.setHorizontalAlignment(SwingConstants.LEFT);
 		minusButton.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		minusButton.setBounds(135, 259, 55, 52);
 		frame.getContentPane().add(minusButton);
 		
 		multButton = new JButton("*");
-		multButton.addActionListener((e)->{UpdateResult.updateResult(activateMicro("mult"), resultLablel);});
+		multButton.addActionListener((e)->{UpdateResult.updateResult(activateMicro("mult"), resultTextArea);});
 		multButton.setHorizontalAlignment(SwingConstants.LEFT);
 		multButton.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		multButton.setBounds(232, 259, 55, 52);
@@ -141,7 +143,7 @@ public class CalcGUI {
 			try {
 				if(Float.parseFloat(textField2.getText())==0)
 					PopoUpDivByZero.getPopUpMsgDivByZero();
-				UpdateResult.updateResult(activateMicro("div"), resultLablel);
+				UpdateResult.updateResult(activateMicro("div"), resultTextArea);
 			}
 			catch (Exception e1) {
 				JOptionPane.showMessageDialog(null, "Fields cannot be empty");
@@ -160,7 +162,7 @@ public class CalcGUI {
 			try {
 				if(Float.parseFloat(textField2.getText())==0)
 					PopoUpDivByZero.getPopUpMsgDivByZero();
-				UpdateResult.updateResult(activateMicro("modulo"), resultLablel);
+				UpdateResult.updateResult(activateMicro("modulo"), resultTextArea);
 			}
 			catch (Exception e2) {
 				JOptionPane.showMessageDialog(null, "Fields cannot be empty");
@@ -177,13 +179,13 @@ public class CalcGUI {
 			String path= "\"" +pythonServicesPath+"\\"+"secant_method"+".py\"";
 			if(ExistFile.isFileExist(path.substring(1, path.length()-1))) {
 				String res = RunCmdService.runCmd(pythonPath, path, new ArrayList<String>());
-				resultLablel.setText(res + " By secant");
+				resultTextArea.setText(res + " By secant");
 			}
 			else {
 				path= "\"" +pythonServicesPath+"\\"+"bisection_method"+".py\"";
 				if(ExistFile.isFileExist(path.substring(1, path.length()-1))) {
 					String res = RunCmdService.runCmd(pythonPath, path, new ArrayList<String>());
-					resultLablel.setText(res + " By bisection");
+					resultTextArea.setText(res + " By bisection");
 				}
 				else
 					JOptionPane.showMessageDialog(null, "Cannot find microservice");
