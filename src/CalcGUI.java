@@ -3,17 +3,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
-
 import java.awt.Dimension;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.io.File;
 import java.util.ArrayList;
-import java.awt.event.ActionEvent;
 import java.awt.Font;
 
 public class CalcGUI {
@@ -37,15 +31,8 @@ public class CalcGUI {
 
 	private String activateMicro(String name){
 		ArrayList<String> arr = new ArrayList<>();
-		try {
-			float a = Float.parseFloat(textField1.getText());
-			float b = Float.parseFloat(textField2.getText());
-			arr.add(a+"");
-			arr.add(b+"");
-		}
-		catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Fields cannot be empty");
-		}
+		arr.add(textField1.getText());
+		arr.add(textField2.getText());
 		String path= "\"" +pythonServicesPath+"\\"+name+".py\"";
 		String res = RunCmdService.runCmd(pythonPath, path, arr);
 		return res;
@@ -113,8 +100,9 @@ public class CalcGUI {
 		frame.getContentPane().add(lbl);
 		
 		resultTextArea = new JTextArea("RESULT");
+		resultTextArea.setLineWrap(true);
 		resultTextArea.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		resultTextArea.setBounds(481, 100, 208, 39);
+		resultTextArea.setBounds(460, 90, 200, 60);
 		frame.getContentPane().add(resultTextArea);
 		
 		plusButton = new JButton("+");
@@ -139,16 +127,7 @@ public class CalcGUI {
 		frame.getContentPane().add(multButton);
 		
 		divButton = new JButton("/");
-		divButton.addActionListener((e)->{
-			try {
-				if(Float.parseFloat(textField2.getText())==0)
-					PopoUpDivByZero.getPopUpMsgDivByZero();
-				UpdateResult.updateResult(activateMicro("div"), resultTextArea);
-			}
-			catch (Exception e1) {
-				JOptionPane.showMessageDialog(null, "Fields cannot be empty");
-			}
-		});
+		divButton.addActionListener((e)->{UpdateResult.updateResult(activateMicro("div"), resultTextArea);});
 		divButton.setHorizontalAlignment(SwingConstants.LEFT);
 		divButton.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		divButton.setBounds(335, 259, 55, 52);
@@ -158,16 +137,7 @@ public class CalcGUI {
 		modButton.setHorizontalAlignment(SwingConstants.LEFT);
 		modButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		modButton.setBounds(435, 259, 55, 52);
-		modButton.addActionListener((e)->{
-			try {
-				if(Float.parseFloat(textField2.getText())==0)
-					PopoUpDivByZero.getPopUpMsgDivByZero();
-				UpdateResult.updateResult(activateMicro("modulo"), resultTextArea);
-			}
-			catch (Exception e2) {
-				JOptionPane.showMessageDialog(null, "Fields cannot be empty");
-			}
-		});
+		modButton.addActionListener((e)->{UpdateResult.updateResult(activateMicro("modulo"), resultTextArea);});
 		frame.getContentPane().add(modButton);
 		
 		rootButton = new JButton("Root");
