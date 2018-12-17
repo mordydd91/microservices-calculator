@@ -16,7 +16,7 @@ class Bisection(unittest.TestCase):
 
     def test_service(self):
         self.assertAlmostEqual(float(cmd.execute_microservice(1,2,"bisection_method.py")), 2 ** 0.5, delta = epsilon)
-        self.assertAlmostEqual(float(cmd.execute_microservice("", "2", "bisection_method.py")) , 2 ** 0.5, delta = epsilon)
+        self.assertAlmostEqual(float(cmd.execute_microservice("", "2", "bisection_method.py")), 2 ** 0.5, delta = epsilon)
 
 
 if __name__ == "__main__":

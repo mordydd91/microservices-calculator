@@ -10,7 +10,6 @@ class CMD(unittest.TestCase):
     
     def test_find(self):
         pass
-    
     def test_run_command(self):    
         pass
     def test_execute_microservice(self):
