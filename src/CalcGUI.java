@@ -1,7 +1,6 @@
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import java.awt.Dimension;
 import javax.swing.JTextField;
@@ -33,9 +32,12 @@ public class CalcGUI {
 		ArrayList<String> arr = new ArrayList<>();
 		arr.add(textField1.getText());
 		arr.add(textField2.getText());
-		String path= "\"" +pythonServicesPath+"\\"+name+".py\"";
-		String res = RunCmdService.runCmd(pythonPath, path, arr);
+		String res = RunCmdService.runCmd(pythonPath, "\""+getPath(name)+"\"", arr);
 		return res;
+	}
+	
+	private String getPath(String serviceName) {
+		return pythonServicesPath+"\\"+serviceName+".py";
 	}
 
 	/**
@@ -120,7 +122,12 @@ public class CalcGUI {
 		frame.getContentPane().add(minusButton);
 		
 		multButton = new JButton("*");
-		multButton.addActionListener((e)->{UpdateResult.updateResult(activateMicro("mult"), resultTextArea);});
+		multButton.addActionListener((e)->{
+			if(ExistFile.isFileExist(getPath("mult")))
+				UpdateResult.updateResult(activateMicro("mult"), resultTextArea);
+			else if(ExistFile.isFileExist(getPath("multWithPlus")))
+				UpdateResult.updateResult(activateMicro("multWithPlus"), resultTextArea);
+		});
 		multButton.setHorizontalAlignment(SwingConstants.LEFT);
 		multButton.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		multButton.setBounds(232, 259, 55, 52);
@@ -146,20 +153,10 @@ public class CalcGUI {
 		rootButton.setToolTipText("The root of the function: x^2-2");
 		rootButton.setBounds(533, 259, 108, 52);
 		rootButton.addActionListener((e)->{
-			String path= "\"" +pythonServicesPath+"\\"+"secant_method"+".py\"";
-			if(ExistFile.isFileExist(path.substring(1, path.length()-1))) {
-				String res = RunCmdService.runCmd(pythonPath, path, new ArrayList<String>());
-				resultTextArea.setText(res + " By secant");
-			}
-			else {
-				path= "\"" +pythonServicesPath+"\\"+"bisection_method"+".py\"";
-				if(ExistFile.isFileExist(path.substring(1, path.length()-1))) {
-					String res = RunCmdService.runCmd(pythonPath, path, new ArrayList<String>());
-					resultTextArea.setText(res + " By bisection");
-				}
-				else
-					JOptionPane.showMessageDialog(null, "Cannot find microservice");
-			}
+			if(ExistFile.isFileExist(getPath("secant_method"))) 
+				resultTextArea.setText(activateMicro("secant_method") + " By secant");
+			else if(ExistFile.isFileExist(getPath("bisection_method"))) 
+				resultTextArea.setText(activateMicro("bisection_method") + " By bisection");	
 		});
 		frame.getContentPane().add(rootButton);
 	}

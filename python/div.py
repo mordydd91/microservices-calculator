@@ -8,7 +8,7 @@ def service():
     param = getParam()
     if isinstance(param, str): return param
     a,b = param
-    if(b==0): return "cannot devide by zero"
+    if(b==0): return "cannot divide by zero"
     return div(a,b)
 	
 if __name__ == "__main__":
