@@ -1,4 +1,4 @@
-var getParam = function(){
+module.exports.getParam = function(){
     let argCount = process.argv.length - 2
     if(argCount<2)
       throw new Error("not enough args, argCount=" + argCount + "<2")
@@ -10,22 +10,4 @@ var getParam = function(){
     catch(err){
       throw new Error("NaN")
     }
-}
-
-var plus = function(a,b){
-    return a+b
-}
-
-var service = function() {
-  try{
-    let x = getParam()
-    return plus(x.a,x.b)
-  }
-  catch(err){
-    return err.toString();
-  }
-}
-
-if (require.main === module) {
-  console.log(service())
 }
