@@ -1,4 +1,5 @@
 from math import log
+import runCmdCommand as cmd
 
 def optimal_iteration(a, b, epsilon):
     div=epsilon/float(b-a)
@@ -9,7 +10,8 @@ def bisection_method(aX, bX, f, epsilon=10**-4):
         return "Error! f(a) and f(b) don't have opposite signs"
     num_iteration = optimal_iteration(aX, bX, epsilon)
     count = 0
-    mX = (aX + bX) / 2.0
+    p = float(cmd.execute_microservice(aX, bX, "plus.py"))
+    mX =  float(cmd.execute_microservice(p, 2, "div.py"))
     while(count<num_iteration and abs(f(mX))>epsilon):
         if(f(aX)*f(mX)<0):
             bX=mX

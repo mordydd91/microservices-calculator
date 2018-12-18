@@ -7,6 +7,7 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.awt.Font;
 
 public class CalcGUI {
@@ -24,20 +25,35 @@ public class CalcGUI {
 	private JButton rootButton;
 	private JTextField textField1;
 	
-	private String pythonPath = "python";
-//	private static String basePath = new File(CalcGUI.class.getResource("").getFile()).getAbsolutePath();
-	public static String pythonServicesPath = System.getProperty("user.dir") + "\\python";
+	static private HashMap<String,String> compilersServices = new HashMap<>();
+	static private HashMap<String,String> compilersEnds = new HashMap<>();
+	static private HashMap<String,String> compilers = new HashMap<>();
+	static private String python = "python";
+	static private String nodejs = "nodejs";
+	static {
+		compilers.put(python, "python");
+		compilers.put(nodejs, "node");
+		compilersEnds.put("python", ".py");
+		compilersEnds.put("nodejs", ".js");
+		compilersServices.put("python", System.getProperty("user.dir") + "\\python");
+		compilersServices.put("nodejs", System.getProperty("user.dir") + "\\javascript");
+	}
+	private String activatePython(String name) {
+		return activateMicro("python",name);
+	}
+	private String activateJS(String name) {
+		return activateMicro("nodejs",name);
+	}
+	private String activateMicro(String compiler,String name){
 
-	private String activateMicro(String name){
 		ArrayList<String> arr = new ArrayList<>();
 		arr.add(textField1.getText());
 		arr.add(textField2.getText());
-		String res = RunCmdService.runCmd(pythonPath, "\""+getPath(name)+"\"", arr);
+		String res = RunCmdService.runCmd(compilers.get(compiler), "\""+getPath(compiler,name)+"\"", arr);
 		return res;
 	}
-	
-	private String getPath(String serviceName) {
-		return pythonServicesPath+"\\"+serviceName+".py";
+	private String getPath(String compiler,String serviceName) {
+		return compilersServices.get(compiler) +"\\"+serviceName + (serviceName.contains(compilersEnds.get(compiler)) ? "" : compilersEnds.get(compiler));
 	}
 
 	/**
@@ -109,13 +125,19 @@ public class CalcGUI {
 		
 		plusButton = new JButton("+");
 		plusButton.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		plusButton.addActionListener((e)->{UpdateResult.updateResult(activateMicro("plus"), resultTextArea);});
+		plusButton.addActionListener((e)->{
+			if(ExistFile.isFileExist(getPath(nodejs,"plus"))) UpdateResult.updateResult(activateJS("plus"), resultTextArea);
+			else if(ExistFile.isFileExist(getPath(python,"plus"))) UpdateResult.updateResult(activatePython("plus"), resultTextArea);
+		});
 		plusButton.setHorizontalAlignment(SwingConstants.LEFT);
 		plusButton.setBounds(36, 259, 55, 52);
 		frame.getContentPane().add(plusButton);
 		
 		minusButton = new JButton("-");
-		minusButton.addActionListener((e)->{UpdateResult.updateResult(activateMicro("minus"), resultTextArea);});
+		minusButton.addActionListener((e)->{
+			if(ExistFile.isFileExist(getPath(nodejs,"minus"))) UpdateResult.updateResult(activateJS("minus"), resultTextArea);
+			else if(ExistFile.isFileExist(getPath(python,"minus"))) UpdateResult.updateResult(activatePython("minus"), resultTextArea);
+		});
 		minusButton.setHorizontalAlignment(SwingConstants.LEFT);
 		minusButton.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		minusButton.setBounds(135, 259, 55, 52);
@@ -123,10 +145,10 @@ public class CalcGUI {
 		
 		multButton = new JButton("*");
 		multButton.addActionListener((e)->{
-			if(ExistFile.isFileExist(getPath("mult")))
-				UpdateResult.updateResult(activateMicro("mult"), resultTextArea);
-			else if(ExistFile.isFileExist(getPath("multWithPlus")))
-				UpdateResult.updateResult(activateMicro("multWithPlus"), resultTextArea);
+			if(ExistFile.isFileExist(getPath(python,"mult")))
+				UpdateResult.updateResult(activatePython("mult"), resultTextArea);
+			else if(ExistFile.isFileExist(getPath(nodejs,"multWithPlus")))
+				UpdateResult.updateResult(activatePython("multWithPlus"), resultTextArea);
 		});
 		multButton.setHorizontalAlignment(SwingConstants.LEFT);
 		multButton.setFont(new Font("Tahoma", Font.PLAIN, 30));
@@ -134,7 +156,7 @@ public class CalcGUI {
 		frame.getContentPane().add(multButton);
 		
 		divButton = new JButton("/");
-		divButton.addActionListener((e)->{UpdateResult.updateResult(activateMicro("div"), resultTextArea);});
+		divButton.addActionListener((e)->{UpdateResult.updateResult(activatePython("div"), resultTextArea);});
 		divButton.setHorizontalAlignment(SwingConstants.LEFT);
 		divButton.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		divButton.setBounds(335, 259, 55, 52);
@@ -144,7 +166,7 @@ public class CalcGUI {
 		modButton.setHorizontalAlignment(SwingConstants.LEFT);
 		modButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		modButton.setBounds(435, 259, 55, 52);
-		modButton.addActionListener((e)->{UpdateResult.updateResult(activateMicro("modulo"), resultTextArea);});
+		modButton.addActionListener((e)->{UpdateResult.updateResult(activatePython("modulo"), resultTextArea);});
 		frame.getContentPane().add(modButton);
 		
 		rootButton = new JButton("Root");
@@ -153,10 +175,10 @@ public class CalcGUI {
 		rootButton.setToolTipText("The root of the function: x^2-2");
 		rootButton.setBounds(533, 259, 108, 52);
 		rootButton.addActionListener((e)->{
-			if(ExistFile.isFileExist(getPath("secant_method"))) 
-				resultTextArea.setText(activateMicro("secant_method") + " By secant");
-			else if(ExistFile.isFileExist(getPath("bisection_method"))) 
-				resultTextArea.setText(activateMicro("bisection_method") + " By bisection");	
+			if(ExistFile.isFileExist(getPath(python,"secant_method"))) 
+				resultTextArea.setText(activatePython("secant_method") + " By secant");
+			else if(ExistFile.isFileExist(getPath(python,"bisection_method"))) 
+				resultTextArea.setText(activatePython("bisection_method") + " By bisection");	
 		});
 		frame.getContentPane().add(rootButton);
 	}

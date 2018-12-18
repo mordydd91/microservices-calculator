@@ -5,10 +5,10 @@ import java.util.ArrayList;
 
 public class RunCmdService {
 			
-	public static String runCmd(String pythonPath, String filePath, ArrayList<String> args) {
+	public static String runCmd(String compiler, String filePath, ArrayList<String> args) {
 		String a = "";
 		for(String s:args) {a+=s+" ";}
-		String path = pythonPath + " " + filePath + " " + a;
+		String path = compiler + " " + filePath + " " + a;
 		String decoded = null;
 		try {
 			decoded = URLDecoder.decode(path, "UTF-8");
@@ -18,7 +18,7 @@ public class RunCmdService {
 	}
 	
 	private String executeCommand(String command) {
-
+		System.out.println("COMMAND: " + command);
 		StringBuffer output = new StringBuffer();
 
 		Process p;
