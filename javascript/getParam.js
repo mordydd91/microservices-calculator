@@ -1,4 +1,4 @@
-module.exports.getParam = function(){
+getParam = function(){
     let argCount = process.argv.length - 2
     if(argCount<2)
       throw new Error("not enough args, argCount=" + argCount + "<2")
@@ -10,4 +10,8 @@ module.exports.getParam = function(){
     catch(err){
       throw new Error("NaN")
     }
+}
+
+module.exports = {
+  getParam: getParam
 }

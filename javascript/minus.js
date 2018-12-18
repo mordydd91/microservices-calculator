@@ -1,4 +1,4 @@
-let get = require("./getParam.js")
+var get = require("./getParam.js")
 var minus = function(a,b){
     return a-b
 }
@@ -16,3 +16,8 @@ var service = function() {
 if (require.main === module) {
   console.log(service())
 }
+
+module.exports = {
+    minus: minus,
+    service: service
+};

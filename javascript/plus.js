@@ -16,3 +16,8 @@ var service = function() {
 if (require.main === module) {
   console.log(service())
 }
+
+module.exports = {
+    plus: plus,
+    service: service
+};
