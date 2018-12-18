@@ -9,8 +9,6 @@ import javax.swing.SwingConstants;
 import java.util.ArrayList;
 import java.awt.Font;
 
-//test - github
-
 public class CalcGUI {
 
 	private JFrame frame;
