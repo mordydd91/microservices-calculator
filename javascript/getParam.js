@@ -1,4 +1,4 @@
-getParam = function(){
+getParam = () => { 
     let argCount = process.argv.length - 2
     if(argCount<2)
       throw new Error("not enough args, argCount=" + argCount + "<2")
