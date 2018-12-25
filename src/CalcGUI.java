@@ -147,7 +147,7 @@ public class CalcGUI {
 		multButton.addActionListener((e)->{
 			if(ExistFile.isFileExist(getPath(python,"mult")))
 				UpdateResult.updateResult(activatePython("mult"), resultTextArea);
-			else if(ExistFile.isFileExist(getPath(nodejs,"multWithPlus")))
+			else if(ExistFile.isFileExist(getPath(python,"multWithPlus")))
 				UpdateResult.updateResult(activatePython("multWithPlus"), resultTextArea);
 		});
 		multButton.setHorizontalAlignment(SwingConstants.LEFT);
